@@ -24,6 +24,12 @@
     <p style="margin-bottom:16px;">Un coordinador de Curandis está validando los datos de tu registro. Recibirás un aviso por correo cuando tu cuenta sea aprobada y puedas acceder a la aplicación.</p>
     <p id="registration-email-status" style="font-size:13px;margin-bottom:18px;"></p>
     <button class="btn btn-ghost" onclick="retryRegistrationEmail()">Reenviar solicitud por correo</button>
+    <div class="field" style="max-width:280px;margin:24px auto 0;text-align:left;">
+      <label for="approval-code">Código enviado por el coordinador</label>
+      <input id="approval-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000">
+      <div class="error-text" id="approval-code-error">El código no es válido.</div>
+    </div>
+    <button class="btn btn-primary" style="margin-top:10px;" onclick="approveWithCode()">Confirmar verificación</button>
   </div>
 
 <script src="app.js"></script>

@@ -95,6 +95,9 @@ function getPostings(){ return loadJSON(LS_KEYS.postings, DEFAULT_POSTINGS); }
 function savePostings(p){ saveJSON(LS_KEYS.postings, p); }
 function getAppliedJobs(){ return loadJSON(LS_KEYS.appliedJobs, []); }
 function saveAppliedJobs(a){ saveJSON(LS_KEYS.appliedJobs, a); }
+function createApprovalCode(){
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
 
 // Asegura que exista la semilla de usuarios demo la primera vez que se visita el sitio
 if(loadJSON(LS_KEYS.users, null) === null){ saveUsers(DEFAULT_USERS); }
@@ -350,6 +353,7 @@ async function notifyAdminOfRegistration(user){
     user.role === 'professional' ? `Registro JVPE: ${user.jvpm || 'No indicado'}` : '',
     user.role === 'professional' ? `Especialidad: ${user.specialty || 'No indicada'}` : '',
     user.role === 'professional' ? `Años de experiencia: ${user.years || 'No indicados'}` : '',
+    `Código de aprobación: ${user.approvalCode}`,
     '',
     'Esta es una solicitud de demostración. No se adjuntan contraseñas ni documentos.'
   ].filter(Boolean).join('\n');
@@ -393,6 +397,25 @@ function updateRegistrationEmailStatus(){
     status.textContent = 'La solicitud se enviará a curandissv@gmail.com.';
   }
 }
+function approveWithCode(){
+  if(!currentUser || currentUser.status === 'approved') return;
+  const input = document.getElementById('approval-code');
+  const error = document.getElementById('approval-code-error');
+  if(!input || !error) return;
+  const code = input.value.trim();
+  if(code !== currentUser.approvalCode){
+    error.textContent = 'El código no es válido. Revisa el correo de Curandis.';
+    error.classList.add('show');
+    return;
+  }
+  const users = getUsers();
+  const stored = users.find(user => user.email === currentUser.email);
+  if(stored) stored.status = 'approved';
+  saveUsers(users);
+  currentUser.status = 'approved';
+  setCurrentUser(currentUser);
+  routeAfterAuth();
+}
 async function finishWizard(){
   const nombre = document.getElementById('w-nombre').value.trim();
   const apellidos = document.getElementById('w-apellidos').value.trim();
@@ -423,6 +446,7 @@ async function finishWizard(){
       titlePhoto, criminalRecordPhoto};
   }
   const users = getUsers();
+  user.approvalCode = createApprovalCode();
   users.push(user);
   saveUsers(users);
   currentUser = user;
