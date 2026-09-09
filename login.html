@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar sesión — Curandis</title>
+<!-- Cabeceras de seguridad recomendadas: limitan desde dónde puede cargar
+     scripts/estilos/imágenes esta página. La versión final debería enviar
+     estas mismas reglas como cabeceras HTTP reales desde el hosting. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="topbar"><div class="brand" onclick="goToDashboard()"><img src="photos/logo.png" alt=""><span>Curandis</span></div><div class="links"><a onclick="goToDashboard()">← Volver al inicio</a></div></nav>
+<div class="form-shell narrow">
+    <div id="panel-signin">
+      <div class="form-header" style="margin-bottom:20px;"><h1 style="font-size:22px;">Bienvenido de nuevo</h1></div>
+      <div class="field"><label>Correo electrónico</label><input type="email" id="si-email" placeholder="correo@ejemplo.com"></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="si-password" placeholder="••••••••"></div>
+      <div class="error-text" id="si-error">No encontramos una cuenta con ese correo. <a class="btn-link" onclick="location.href='registro.html'">Regístrate primero.</a></div>
+      <button class="btn btn-primary btn-block" onclick="doSignIn()" style="margin-top:8px;">Iniciar sesión</button>
+      <div class="demo-box">
+        <p>Cuentas de demostración (sin necesidad de registrarte):</p>
+        <div class="demo-buttons">
+          <button class="btn btn-ghost btn-sm" onclick="demoLogin('family')">Familia</button>
+          <button class="btn btn-ghost btn-sm" onclick="demoLogin('pro-approved')">Profesional aprobado</button>
+          <button class="btn btn-ghost btn-sm" onclick="demoLogin('pro-pending')">Profesional pendiente</button>
+        </div>
+      </div>
+    </div>
+
+  <p style="text-align:center;font-size:13px;margin-top:18px;">¿No tienes cuenta? <a class="btn-link" href="registro.html">Regístrate aquí</a></p>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

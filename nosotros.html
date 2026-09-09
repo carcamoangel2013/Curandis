@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosotros — Curandis</title>
+<!-- Cabeceras de seguridad recomendadas: limitan desde dónde puede cargar
+     scripts/estilos/imágenes esta página. La versión final debería enviar
+     estas mismas reglas como cabeceras HTTP reales desde el hosting. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="public-nav" style="display:none;">
+  <nav class="topbar"><div class="brand" onclick="goToDashboard()"><img src="photos/logo.png" alt=""><span>Curandis</span></div><div class="links"><a href="index.html">← Volver al inicio</a><a href="login.html">Iniciar sesión</a></div></nav>
+</div>
+  <div class="tabbar-slot" id="tabbar-nosotros"></div>
+  <div class="app-shell">
+    <div class="nosotros-hero">
+      <div class="nh-top">
+        <div class="nh-icon">💚</div>
+        <div><h2>Curandis</h2><p>Cuidado profesional donde más lo necesitas</p></div>
+      </div>
+      <div class="nh-badges"><span class="nh-badge">JVPE Verificado</span><span class="nh-badge">El Salvador</span><span class="nh-badge">Desde 2026</span></div>
+    </div>
+    <div class="nosotros-stats">
+      <div class="metric-card"><div class="num">8+</div><div class="label">Enfermeros registrados</div></div>
+      <div class="metric-card"><div class="num">100%</div><div class="label">JVPE verificados</div></div>
+      <div class="metric-card"><div class="num">9</div><div class="label">Departamentos cubiertos</div></div>
+    </div>
+    <div class="nosotros-card">
+      <h3>💚 ¿Quiénes somos?</h3>
+      <p><strong>Curandis</strong> es la primera plataforma digital de El Salvador que conecta a familias con enfermeros y enfermeras certificados por la <strong>Junta de Vigilancia de la Profesión de Enfermería (JVPE)</strong> para brindar atención médica a domicilio de forma rápida, segura y accesible.</p>
+      <p style="margin-top:10px;">Nacimos con la convicción de que el cuidado profesional de la salud no debe limitarse a las instalaciones hospitalarias. Creemos que cada paciente merece recibir atención de calidad en la comodidad y seguridad de su hogar.</p>
+    </div>
+    <div class="nosotros-card">
+      <h3>🎯 Nuestra Misión</h3>
+      <div class="nosotros-quote">"Democratizar el acceso a servicios de enfermería profesional a domicilio en El Salvador, conectando a las familias con enfermeros certificados por la JVPE mediante una plataforma digital segura, transparente y fácil de usar, para que el cuidado de la salud llegue a cada hogar salvadoreño que lo necesite."</div>
+    </div>
+    <div class="nosotros-card">
+      <h3>👁️ Nuestra Visión</h3>
+      <div class="nosotros-quote">"Brindar servicios de enfermería a domicilio de forma segura y confiable mediante una plataforma tecnológica que conecte a pacientes con profesionales de la salud calificados, contribuyendo al bienestar y la calidad de vida de las personas."</div>
+    </div>
+    <div class="nosotros-card">
+      <h3>⭐ Nuestros Valores</h3>
+      <div class="value-row"><div class="v-icon">🛡️</div><div><h4>Seguridad y Confianza</h4><p>Todos nuestros enfermeros están verificados y registrados ante la JVPE. Tu seguridad es nuestra prioridad.</p></div></div>
+      <div class="value-row"><div class="v-icon">🏅</div><div><h4>Excelencia Profesional</h4><p>Solo conectamos con profesionales de enfermería titulados, con experiencia comprobada y vocación de servicio.</p></div></div>
+      <div class="value-row"><div class="v-icon">❤️</div><div><h4>Vocación de Servicio</h4><p>Creemos en el cuidado humano integral. Cada paciente merece atención con empatía, respeto y profesionalismo.</p></div></div>
+      <div class="value-row"><div class="v-icon">📈</div><div><h4>Accesibilidad</h4><p>Trabajamos para que el cuidado profesional de la salud sea accesible para todas las familias salvadoreñas.</p></div></div>
+    </div>
+    <div class="nosotros-card">
+      <h3>🔄 ¿Cómo funciona?</h3>
+      <div class="how-row"><div><div class="num-pill">Paso 01</div><h4>Regístrate gratis</h4><p>Crea tu cuenta como cliente o como enfermero/a certificado/a. Solo toma 2 minutos.</p></div></div>
+      <div class="how-row"><div><div class="num-pill">Paso 02</div><h4>Busca o publica</h4><p>Clientes: busca un enfermero/a por especialidad y zona, o publica un trabajo abierto. Enfermeros: revisa el tablero de trabajos disponibles.</p></div></div>
+      <div class="how-row"><div><div class="num-pill">Paso 03</div><h4>Coordina y conecta</h4><p>Una vez aceptada la solicitud, usa el chat interno para coordinar todos los detalles del servicio.</p></div></div>
+    </div>
+    <div class="nosotros-card">
+      <h3>✅ Nuestras garantías</h3>
+      <div class="guarantee-row">✅ Todos los enfermeros tienen registro activo ante la JVPE</div>
+      <div class="guarantee-row">✅ Verificación de documentos de identidad (DUI)</div>
+      <div class="guarantee-row">✅ Perfiles con especialidad, experiencia y calificaciones reales</div>
+      <div class="guarantee-row">✅ Plataforma 100% salvadoreña, diseñada para nuestra realidad</div>
+      <div class="guarantee-row">✅ Sin intermediarios — tú coordinas directamente con el profesional</div>
+      <div class="guarantee-row">✅ Chat privado y seguro para coordinar tu servicio</div>
+    </div>
+  </div>
+
+<script src="app.js"></script>
+<script>
+  if(currentUser){ renderTabbar('nosotros'); }
+  else { document.getElementById('public-nav').style.display = 'block'; }
+</script>
+</body>
+</html>

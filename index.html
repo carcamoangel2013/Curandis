@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curandis — Cuidado en casa, empleo digno</title>
+<!-- Cabeceras de seguridad recomendadas: limitan desde dónde puede cargar
+     scripts/estilos/imágenes esta página. La versión final debería enviar
+     estas mismas reglas como cabeceras HTTP reales desde el hosting. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ MODAL LEGAL (aparece solo la primera vez) ============ -->
+<div id="modal-overlay">
+  <div class="modal-card"> 
+    <span class="eyebrow">Antes de continuar</span>
+    <h2>Tu privacidad y la de tu familia nos importan</h2>
+    <p style="font-size:14.5px;">Curandis conecta a familias con profesionales de enfermería validados. Antes de entrar, queremos que sepas cómo tratamos tu información y cuál es el alcance real de la plataforma.</p>
+    <div class="legal-block"><h4>Protección de datos sensibles</h4><p>La información de salud que compartas se trata de forma confidencial y solo se comparte con el profesional asignado a tu solicitud.</p></div>
+    <div class="legal-block"><h4>Alcance del servicio</h4><p>Curandis es un puente de contratación y validación de perfiles. No sustituye los servicios de emergencia médica hospitalaria. Ante una urgencia vital, comunícate al 911.</p></div>
+    <label class="checkbox-row"><input type="checkbox" id="accept-terms"><span>He leído y acepto los Términos de uso y el Aviso de tratamiento de datos de salud de Curandis.</span></label>
+    <button class="btn btn-primary btn-block" id="accept-btn" disabled>Aceptar y continuar</button>
+  </div>
+</div>
+
+<!-- ============ BIENVENIDA ============ -->
+<div class="welcome-hero" id="screen-welcome">
+  <div class="landing-card">
+    <div class="logo-tile"><img src="photos/logo.png" alt="Curandis"></div>
+    <h1>Curandis</h1>
+    <p class="sub">Conectamos familias con enfermeros registrados JVPE para atención profesional en casa.</p>
+    <div class="landing-badges">
+      <div class="landing-badge"><div class="lb-icon">🛡️</div><div class="lb-label">JVPE verificado</div></div>
+      <div class="landing-badge"><div class="lb-icon">⭐</div><div class="lb-label">Altamente calificados</div></div>
+      <div class="landing-badge"><div class="lb-icon">👥</div><div class="lb-label">8+ enfermeros</div></div>
+    </div>
+    <button class="btn btn-primary btn-block" onclick="location.href='registro.html'">Crear cuenta gratis →</button>
+    <button class="btn btn-ghost btn-block" onclick="openAuth()">Ya tengo cuenta — Ingresar</button>
+    <a class="landing-demo" onclick="watchDemo()">Ver demo con enfermera María Hernández →</a>
+    <p class="landing-foot">Curandis · El Salvador</p>
+  </div>
+</div>
+
+<!-- ============ LANDING PÚBLICO / MARKETING ============ -->
+<div id="screen-dashboard">
+  <nav class="topbar">
+    <div class="brand" onclick="scrollToTop()"><img src="photos/logo.png" alt=""><span>Curandis</span></div>
+    <div class="links">
+      <a onclick="scrollToId('como-funciona')">Cómo funciona</a>
+      <a onclick="scrollToId('impacto')">Impacto social</a>
+      <a href="nosotros.html">Nosotros</a>
+      <span id="nav-guest">
+        <a onclick="openAuth()">Iniciar sesión</a>
+        <button class="btn btn-primary btn-sm" onclick="location.href='registro.html'">Registrarse</button>
+      </span>
+      <span id="nav-user" style="display:none;">
+        <span class="user-chip"><span class="avatar" id="nav-avatar">--</span><span id="nav-name">Usuario</span></span>
+        <button class="btn btn-ghost btn-sm" onclick="goToOwnDashboard()">Mi panel</button>
+        <button class="btn btn-ghost btn-sm" onclick="logout()">Salir</button>
+      </span>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <span class="eyebrow">Marketplace social de salud y empleo · El Salvador</span>
+    <h1>Enfermería a domicilio, validada y a tiempo</h1>
+    <p class="lead">Miles de enfermeras y enfermeros titulados están subempleados mientras las familias buscan a ciegas quién cuide a los suyos. Curandis ordena ese encuentro.</p>
+    <div class="hero-highlights">
+      <span class="hero-highlight">✓ Verificación JVPE</span>
+      <span class="hero-highlight">✓ Coordinación rápida</span>
+      <span class="hero-highlight">✓ Tarifas transparentes</span>
+    </div>
+  </div>
+
+  <div class="path-cards">
+    <div class="path-card">
+      <div class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#12A66E" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
+      <h3>Necesito cuidado en casa</h3>
+      <p>Cuéntanos quién necesita atención, qué tipo de cuidado requiere y en qué horario. Te conectamos con un profesional validado.</p>
+      <button class="btn btn-primary" onclick="enterFlow('family')">Solicitar cuidado</button>
+    </div>
+    <div class="path-card">
+      <div class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#12A66E" stroke-width="1.8"><path d="M12 12a4 4 0 100-8 4 4 0 000 8z"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+      <h3>Soy profesional de enfermería</h3>
+      <p>Registra tu experiencia, tu especialidad y tu documentación. Postúlate a turnos reales y genera ingresos desde ya.</p>
+      <button class="btn btn-primary" onclick="enterFlow('professional')">Buscar empleo</button>
+    </div>
+  </div>
+
+  <section id="como-funciona">
+    <h2 class="section-title">Cómo funciona</h2>
+    <p class="section-sub">Un proceso claro, en tres pasos, para quien contrata y para quien trabaja.</p>
+    <div class="steps-grid">
+      <div class="step-item"><div class="num">01</div><h4>Cuéntanos qué necesitas</h4><p>La familia describe al paciente, el tipo de cuidado y la disponibilidad horaria. El profesional se registra con su documentación.</p></div>
+      <div class="step-item"><div class="num">02</div><h4>Te conectamos validado</h4><p>Cruzamos la solicitud con profesionales aprobados cuyas competencias coinciden con la necesidad real.</p></div>
+      <div class="step-item"><div class="num">03</div><h4>Coordinas el turno</h4><p>Se confirma horario, tarifa por turno, e insumos necesarios. El cuidado empieza en casa, con seguimiento.</p></div>
+    </div>
+  </section>
+
+  <svg class="roofline" viewBox="0 0 1080 34" preserveAspectRatio="none"><path d="M0,30 L45,8 L90,30 L135,8 L180,30 L225,8 L270,30 L315,8 L360,30 L405,8 L450,30 L495,8 L540,30 L585,8 L630,30 L675,8 L720,30 L765,8 L810,30 L855,8 L900,30 L945,8 L990,30 L1035,8 L1080,30"/></svg>
+
+  <section class="wide-bg" id="impacto">
+    <div class="inner">
+      <h2 class="section-title">Impacto social</h2>
+      <p class="section-sub">Curandis no es solo tecnología: es una respuesta directa a dos problemas del país.</p>
+      <div class="impact-grid">
+        <div class="impact-card"><h4>Erradica el desempleo sectorial</h4><p>Funciona como incubadora de empleo independiente para profesionales recién graduados que hoy no encuentran plaza hospitalaria.</p></div>
+        <div class="impact-card"><h4>Dignifica el trabajo sanitario</h4><p>Las tarifas corresponden al nivel técnico del procedimiento, evitando la explotación laboral y el trabajo informal.</p></div>
+        <div class="impact-card"><h4>Descentraliza la salud</h4><p>Alivia la saturación hospitalaria al permitir recuperaciones estables en el hogar, con supervisión técnica real.</p></div>
+        <div class="impact-card"><h4>Escala con el tiempo</h4><p>La arquitectura modular permite sumar pagos electrónicos y control de insumos en fases futuras.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="beneficios">
+    <h2 class="section-title">Más tranquilidad para cada turno</h2>
+    <p class="section-sub">Diseñamos la experiencia para que no tengas que improvisar cuando más importa la confianza.</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="fc-icon">🛡️</div>
+        <h3>Perfiles verificados</h3>
+        <p>Tu solicitud se apoya en profesionales con registro, experiencia y validación previa.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">📅</div>
+        <h3>Coordinación simple</h3>
+        <p>Publicas lo que necesitas y el sistema organiza el proceso de forma clara y rápida.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">💙</div>
+        <h3>Atención humana</h3>
+        <p>La plataforma facilita la conexión entre familia y profesional, sin perder el trato cercano.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonios">
+    <h2 class="section-title">Lo que dicen quienes ya lo prueban</h2>
+    <p class="section-sub">Pequeños cambios de experiencia que generan mucha más confianza.</p>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="quote">“Encontramos a una enfermera en menos de un día y todo se sintió mucho más claro.”</div>
+        <div class="author">— María, familia en San Salvador</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote">“La plataforma me ayudó a mostrar mi experiencia y conseguir turnos de manera más justa.”</div>
+        <div class="author">— Carlos, enfermero profesional</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote">“Me gustó que el proceso fuera transparente y no tuviera que pedir referencias a ciegas.”</div>
+        <div class="author">— Roxana, cuidadora familiar</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="cta-band">
+      <div>
+        <h3>¿Listo para dar el siguiente paso?</h3>
+        <p>Abre tu cuenta, define tu rol y empieza a construir una experiencia más segura para tu familia o tu carrera.</p>
+      </div>
+      <button class="btn btn-primary" onclick="location.href='registro.html'">Crear cuenta gratis</button>
+    </div>
+  </section>
+
+  <section id="nosotros-teaser">
+    <h2 class="section-title">Por qué existe Curandis</h2>
+    <p class="section-sub" style="max-width:680px;">En El Salvador conviven dos realidades: profesionales de enfermería titulados sin plaza, y familias que buscan a ciegas quién cuide a sus seres queridos en casa. Curandis es el marketplace social que valida al profesional, dignifica su pago por turno, y le da a la familia un proceso de contratación transparente.</p>
+    <p style="text-align:center;margin-top:14px;"><a class="btn-link" href="nosotros.html">Conoce más sobre nosotros →</a></p>
+  </section>
+
+  <footer><p class="mono">CURANDIS © 2026 · El Salvador · Prototipo funcional de demostración.</p></footer>
+</div>
+
+<script src="app.js"></script>
+<script>
+  scrollToHashOnLoad();
+</script>
+</body>
+</html>

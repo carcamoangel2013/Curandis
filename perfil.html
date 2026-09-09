@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi perfil — Curandis</title>
+<!-- Cabeceras de seguridad recomendadas: limitan desde dónde puede cargar
+     scripts/estilos/imágenes esta página. La versión final debería enviar
+     estas mismas reglas como cabeceras HTTP reales desde el hosting. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="tabbar-slot" id="tabbar-nurse-profile"></div>
+  <div class="app-shell">
+    <div class="profile-hero">
+      <div class="ph-avatar" id="prof-avatar">--</div>
+      <div><h2 id="prof-name">—</h2><p id="prof-specialty">—</p><p id="prof-reg" style="margin-top:2px;">✓ JVPE: —</p></div>
+    </div>
+    <div class="profile-metrics">
+      <div class="metric-card"><div class="num" id="prof-rating">5.0</div><div class="label">⭐ Rating</div></div>
+      <div class="metric-card"><div class="num" id="prof-years">1</div><div class="label">📈 Años exp.</div></div>
+      <div class="metric-card"><div class="num" id="prof-rate">$15</div><div class="label">$ Tarifa/hr</div></div>
+    </div>
+    <div class="profile-list">
+      <div class="profile-row"><div class="pr-icon">✉️</div><div><div class="pr-label">Correo</div><div class="pr-value" id="prof-email">—</div></div></div>
+      <div class="profile-row"><div class="pr-icon">📞</div><div><div class="pr-label">Teléfono</div><div class="pr-value" id="prof-phone">—</div></div></div>
+      <div class="profile-row"><div class="pr-icon">📍</div><div><div class="pr-label">Ubicación</div><div class="pr-value" id="prof-location">—</div></div></div>
+      <div class="profile-row"><div class="pr-icon">📶</div><div><div class="pr-label">Radio</div><div class="pr-value" id="prof-radius">— km de cobertura</div></div></div>
+      <div class="profile-row"><div class="pr-icon">⚕️</div><div><div class="pr-label">Especialidad</div><div class="pr-value" id="prof-spec2">—</div></div></div>
+      <div class="profile-row"><div class="pr-icon">🛡️</div><div><div class="pr-label">Registro</div><div class="pr-value" id="prof-reg2">—</div></div></div>
+    </div>
+    <button class="logout-row" onclick="logout()">↪ Cerrar sesión</button>
+  </div>
+
+<script src="app.js"></script>
+<script>
+  if(requireAuth('professional')){
+    renderTabbar('nurse-profile');
+    renderNurseProfile();
+  }
+</script>
+</body>
+</html>

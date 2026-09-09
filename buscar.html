@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buscar enfermeros — Curandis</title>
+<!-- Cabeceras de seguridad recomendadas: limitan desde dónde puede cargar
+     scripts/estilos/imágenes esta página. La versión final debería enviar
+     estas mismas reglas como cabeceras HTTP reales desde el hosting. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="tabbar-slot" id="tabbar-client-search"></div>
+  <div class="app-shell">
+    <div class="stat-banner">
+      <div class="sb-title">✨ Profesionales disponibles ahora</div>
+      <div class="sb-nums">
+        <div class="sb-num"><b id="sb-disponibles">0</b><span>Disponibles</span></div>
+        <div class="sb-num"><b id="sb-total">0</b><span>Total JVPE</span></div>
+        <div class="sb-num"><b id="sb-zona">0</b><span>Tu zona</span></div>
+      </div>
+    </div>
+    <div class="search-row">
+      <input type="text" id="nurse-search-input" placeholder="Nombre o especialidad..." oninput="renderNurseSearch()">
+      <select id="nurse-search-filter" onchange="renderNurseSearch()"><option value="">Todas las especial…</option></select>
+    </div>
+    <div id="nurse-search-results"></div>
+    <div class="empty-invite">
+      <div><p><strong>¿No encuentras a quién buscas?</strong></p><p class="small">Publica un trabajo abierto y cualquier enfermero/a disponible podrá aceptarlo.</p></div>
+      <button class="btn btn-primary btn-sm" onclick="openOpenJobModal()">+ Publicar trabajo abierto</button>
+    </div>
+  </div>
+
+
+<div id="request-modal-overlay" onclick="if(event.target===this) closeRequestModal()">
+  <div class="req-modal">
+    <div class="req-modal-head">
+      <div>
+        <h3 id="req-modal-title">Nueva Solicitud</h3>
+        <p id="req-modal-sub">Completa los datos del servicio que necesitas</p>
+      </div>
+      <button class="req-close" onclick="closeRequestModal()">✕</button>
+    </div>
+    <div id="req-nurse-chip-slot"></div>
+    <div class="open-note" id="req-open-note" style="display:none;">
+      <span>👥</span><div><strong>Solicitud abierta</strong><br>Todos los enfermeros/as registrados verán tu trabajo. El primero en aceptar quedará asignado.</div>
+    </div>
+    <div class="req-field"><label>⚠️ Nivel de urgencia</label>
+      <div class="urgency-grid">
+        <div class="urgency-opt selected" id="req-urg-normal" onclick="selectUrgency('normal')"><span class="u-title">Normal</span><span class="u-desc">Atención planificada</span></div>
+        <div class="urgency-opt" id="req-urg-urgente" onclick="selectUrgency('urgente')"><span class="u-title">Urgente</span><span class="u-desc">Lo antes posible</span></div>
+      </div>
+    </div>
+    <div class="req-field-row">
+      <div class="req-field"><label>📅 Fecha</label><input type="date" id="req-fecha"></div>
+      <div class="req-field"><label>🕐 Horario</label><select id="req-horario"><option value="">Elige hora</option><option>Mañana (7am-12pm)</option><option>Tarde (12pm-6pm)</option><option>Noche (6pm-12am)</option><option>24 horas</option></select></div>
+    </div>
+    <div class="req-field"><label>🩺 Tipo de servicio</label>
+      <select id="req-tipo"><option value="">Selecciona el tipo de servicio</option><option>Cuidado geriátrico</option><option>Cuidado pediátrico</option><option>Postoperatorio</option><option>Curación de heridas</option><option>Control de signos vitales</option><option>Administración de medicamentos</option></select>
+    </div>
+    <div class="req-field"><label>👤 Paciente</label><input type="text" id="req-paciente" placeholder="Ej: mamá de 72 años, diagnóstico: diabetes tipo 2"></div>
+    <div class="req-field"><label>💬 Descripción del servicio</label><textarea id="req-desc" rows="3" placeholder="Describe qué necesitas: estado del paciente, materiales disponibles, frecuencia, indicaciones médicas, dirección exacta, acceso a la vivienda..."></textarea></div>
+    <p class="req-hint">Cuanto más detalle, mejor puede prepararse el enfermero/a.</p>
+    <div class="req-modal-foot">
+      <button class="btn btn-ghost" onclick="closeRequestModal()">Cancelar</button>
+      <button class="btn btn-primary" id="req-submit-btn" onclick="submitRequest()">📶 Enviar Solicitud</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  if(requireAuth('family')){
+    renderTabbar('client-search');
+    renderNurseSearch();
+  }
+</script>
+</body>
+</html>

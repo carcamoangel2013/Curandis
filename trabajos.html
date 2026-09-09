@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolsa de trabajo — Curandis</title>
+<!-- Cabeceras de seguridad recomendadas: limitan desde dónde puede cargar
+     scripts/estilos/imágenes esta página. La versión final debería enviar
+     estas mismas reglas como cabeceras HTTP reales desde el hosting. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="tabbar-slot"></div>
+  <div class="dash-shell">
+    <div class="dash-head"><h1>Bolsa de trabajo y agenda</h1></div>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="num">128</div><div class="label">Turnos completados</div></div>
+      <div class="metric-card"><div class="num">742</div><div class="label">Horas trabajadas</div></div>
+      <div class="metric-card"><div class="num">$3,860</div><div class="label">Ingresos generados</div></div>
+      <div class="metric-card"><div class="num">4.8 ★</div><div class="label">Calificación promedio</div></div>
+    </div>
+    <div class="dash-grid">
+      <div class="panel">
+        <h3>Ofertas disponibles</h3>
+        <div id="job-list"></div>
+      </div>
+      <div class="panel">
+        <h3>Tu agenda</h3>
+        <div class="agenda-grid" id="agenda-grid"></div>
+        <p style="font-size:12px;margin-top:12px;">Los turnos ya comprometidos se marcan en azul para que nunca choquen con una nueva postulación.</p>
+      </div>
+    </div>
+  </div>
+
+<script src="app.js"></script>
+<script>
+  if(requireAuth('professional')){
+    renderTabbar('nurse-jobs');
+    renderNurseDashboard();
+  }
+</script>
+</body>
+</html>

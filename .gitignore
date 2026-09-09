@@ -1,0 +1,21 @@
+# Dependencias (si en el futuro se agrega backend con Node.js)
+node_modules/
+
+# Variables de entorno y secretos (NUNCA subir esto a GitHub)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editores
+.vscode/
+.idea/
