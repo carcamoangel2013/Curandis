@@ -7,7 +7,7 @@
 <!-- Cabeceras de seguridad recomendadas: limitan desde dónde puede cargar
      scripts/estilos/imágenes esta página. La versión final debería enviar
      estas mismas reglas como cabeceras HTTP reales desde el hosting. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://formsubmit.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex, nofollow">
@@ -20,9 +20,10 @@
   <nav class="topbar"><div class="brand" onclick="goToDashboard()"><img src="photos/logo.png" alt=""><span>Curandis</span></div><div class="links"><a onclick="logout()">Salir</a></div></nav>
   <div class="pending-screen">
     <div class="pending-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9861E" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
-    <h2>Tu documentación está en revisión</h2>
-    <p style="margin-bottom:26px;">Un coordinador de Curandis está validando tu título y tu número de Junta de Vigilancia. Te avisaremos por correo apenas tu perfil sea aprobado y puedas ver la bolsa de trabajo.</p>
-    <button class="btn btn-primary" onclick="simulateApproval()">Simular aprobación (demo)</button>
+    <h2>Tu registro está en revisión</h2>
+    <p style="margin-bottom:16px;">Un coordinador de Curandis está validando los datos de tu registro. Recibirás un aviso por correo cuando tu cuenta sea aprobada y puedas acceder a la aplicación.</p>
+    <p id="registration-email-status" style="font-size:13px;margin-bottom:18px;"></p>
+    <button class="btn btn-ghost" onclick="retryRegistrationEmail()">Reenviar solicitud por correo</button>
   </div>
 
 <script src="app.js"></script>

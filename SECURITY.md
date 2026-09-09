@@ -14,6 +14,20 @@ En cuanto exista un backend real con datos de personas reales, el código
 que maneje esos datos debe pasar a un repositorio privado (o a un plan de
 GitHub que permita Pages privado).
 
+### Qué significa que el repositorio sea público
+Si el repositorio es público, cualquier persona puede leer, descargar y
+clonar `index.html`, `app.js`, `styles.css` y el resto del código. Esto no se
+puede evitar con JavaScript, CSP, `.gitignore` ni con la disuasión de F12:
+una página web necesita entregar su HTML, CSS y JavaScript al navegador.
+`.gitignore` solo evita agregar archivos no rastreados; no oculta archivos
+que ya están en Git ni elimina su historial.
+
+Si no quieres que el código sea visible, cambia el repositorio a **Private**
+en Settings → General → Danger Zone → Change repository visibility. Para
+seguir usando GitHub Pages con un repositorio privado puede ser necesario un
+plan de GitHub compatible. Aunque el repositorio sea privado, la web publicada
+seguirá siendo pública si la aplicación está disponible en Internet.
+
 ## 2. Nunca subir secretos
 - Ninguna contraseña real, clave de API, ni credencial va en el código.
 - Cuando exista backend, usa un archivo `.env` (ya está en `.gitignore`).
@@ -61,3 +75,10 @@ navegador (localStorage), no en GitHub ni en ningún servidor — pero por
 seguridad, **nunca subas al repositorio ni pruebes el formulario con
 documentos reales de una persona real** mientras esto siga siendo un
 prototipo sin backend.
+
+Importante: que los documentos no se suban a GitHub no significa que estén
+protegidos. Cualquier script de la misma página, extensión del navegador o
+persona con acceso al perfil del navegador puede leer `localStorage`. Para
+documentos reales se necesita un backend con autenticación, autorización,
+cifrado en tránsito y almacenamiento privado; no deben guardarse como base64
+en el navegador.

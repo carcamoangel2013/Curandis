@@ -56,7 +56,9 @@ const LS_KEYS = {
   postings: 'curandis_family_postings',
   terms: 'curandis_accepted_terms',
   appliedJobs: 'curandis_applied_jobs',
+  registrationEmailStatus: 'curandis_registration_email_status',
 };
+const ADMIN_EMAIL = 'curandissv@gmail.com';
 
 /* ⚠ Estas contraseñas de demo quedan visibles en texto plano en este
    archivo, y cualquier cuenta que se registre desde registro.html también
@@ -66,7 +68,7 @@ const LS_KEYS = {
    de contraseñas (bcrypt/argon2) — ver el documento "Ciberseguridad
    aplicada", Fase 1. */
 const DEFAULT_USERS = [
-  {email:'familia@demo.com', password:'Demo1234!', role:'family', name:'Ana Gutiérrez'},
+  {email:'familia@demo.com', password:'Demo1234!', role:'family', name:'Ana Gutiérrez', status:'approved'},
   {email:'pro@demo.com', password:'Demo1234!', role:'professional', name:'Karla Mejía', status:'approved', specialty:'Geriatría', zone:'Santa Tecla'},
   {email:'pendiente@demo.com', password:'Demo1234!', role:'professional', name:'Luis Pérez', status:'pending', specialty:'Enfermería General', zone:'Soyapango'},
 ];
@@ -215,30 +217,17 @@ function watchDemo(){
 
 /* ===================== AUTH ROUTER ===================== */
 function routeAfterAuth(){
-  if(currentUser.role === 'family'){
+  if(currentUser.status !== 'approved'){
+    goTo('pendiente');
+  } else if(currentUser.role === 'family'){
     goTo('client-search');
   } else {
-    if(currentUser.status === 'approved'){ goTo('nurse-jobs'); }
-    else { goTo('pendiente'); }
+    goTo('nurse-jobs');
   }
-}
-/* ⚠ PUERTA TRASERA TEMPORAL: sin backend no existe un panel de admin real
-   que apruebe profesionales, así que este botón fuerza el estado
-   "approved" manualmente para poder mostrar la demo completa. Debe
-   eliminarse en cuanto exista un panel de administración real. */
-function simulateApproval(){
-  currentUser.status = 'approved';
-  setCurrentUser(currentUser);
-  const users = getUsers();
-  const stored = users.find(u => u.email === currentUser.email);
-  if(stored){ stored.status = 'approved'; saveUsers(users); }
-  goTo('nurse-jobs');
 }
 function goToOwnDashboard(){
   if(!currentUser){ openAuth(); return; }
-  if(currentUser.role === 'family'){ goTo('client-search'); }
-  else if(currentUser.status === 'approved'){ goTo('nurse-jobs'); }
-  else { goTo('pendiente'); }
+  routeAfterAuth();
 }
 function logout(){
   currentUser = null;
@@ -262,7 +251,7 @@ function updateNavUser(){
 function requireAuth(expectedRole){
   if(!currentUser){ openAuth(); return false; }
   if(expectedRole && currentUser.role !== expectedRole){ goToOwnDashboard(); return false; }
-  if(currentUser.role === 'professional' && currentUser.status !== 'approved' && expectedRole === 'professional'){
+  if(currentUser.status !== 'approved' && window.location.pathname.endsWith(PAGES.pendiente) === false){
     goTo('pendiente'); return false;
   }
   return true;
@@ -351,6 +340,59 @@ function readFileAsDataURL(file){
     reader.readAsDataURL(file);
   });
 }
+async function notifyAdminOfRegistration(user){
+  const fields = [
+    `Nombre: ${user.name}`,
+    `Correo del usuario: ${user.email}`,
+    `Teléfono: ${user.phone || 'No indicado'}`,
+    `Rol: ${user.role === 'professional' ? 'Enfermero/a' : 'Cliente'}`,
+    `Zona: ${user.zone || 'No indicada'}`,
+    user.role === 'professional' ? `Registro JVPE: ${user.jvpm || 'No indicado'}` : '',
+    user.role === 'professional' ? `Especialidad: ${user.specialty || 'No indicada'}` : '',
+    user.role === 'professional' ? `Años de experiencia: ${user.years || 'No indicados'}` : '',
+    '',
+    'Esta es una solicitud de demostración. No se adjuntan contraseñas ni documentos.'
+  ].filter(Boolean).join('\n');
+  try{
+    const response = await fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json', Accept:'application/json'},
+      body: JSON.stringify({
+        _subject: `Nueva solicitud de registro: ${user.name}`,
+        name: user.name,
+        email: user.email,
+        message: fields,
+        _replyto: user.email,
+        _template: 'table',
+        _captcha: 'false',
+      }),
+    });
+    const result = await response.json().catch(() => ({}));
+    return response.ok && result.success !== false;
+  }catch(error){
+    return false;
+  }
+}
+async function retryRegistrationEmail(){
+  if(!currentUser) return;
+  const sent = await notifyAdminOfRegistration(currentUser);
+  saveJSON(LS_KEYS.registrationEmailStatus, sent ? 'sent' : 'failed');
+  updateRegistrationEmailStatus();
+}
+function updateRegistrationEmailStatus(){
+  const status = document.getElementById('registration-email-status');
+  if(!status) return;
+  const result = loadJSON(LS_KEYS.registrationEmailStatus, '');
+  if(result === 'sent'){
+    status.textContent = 'Solicitud enviada. Revisa curandissv@gmail.com y la carpeta de spam. Si es la primera vez, confirma el correo de FormSubmit.';
+    status.style.color = 'var(--blue-deep)';
+  } else if(result === 'failed'){
+    status.textContent = 'No se pudo enviar la solicitud. Comprueba que estés usando la web publicada y pulsa reenviar.';
+    status.style.color = 'var(--danger)';
+  } else {
+    status.textContent = 'La solicitud se enviará a curandissv@gmail.com.';
+  }
+}
 async function finishWizard(){
   const nombre = document.getElementById('w-nombre').value.trim();
   const apellidos = document.getElementById('w-apellidos').value.trim();
@@ -364,7 +406,7 @@ async function finishWizard(){
     const err = document.getElementById('wiz-error-2f');
     if(!depto || pass.length<6 || pass!==pass2){ err.classList.add('show'); return; }
     err.classList.remove('show');
-    user = {email, password:pass, name:nombre+' '+apellidos, role:'family', phone:telefono, zone:depto+', '+document.getElementById('w-municipio').value, radius:document.getElementById('w-radio').value};
+    user = {email, password:pass, name:nombre+' '+apellidos, role:'family', status:'pending', phone:telefono, zone:depto+', '+document.getElementById('w-municipio').value, radius:document.getElementById('w-radio').value};
   } else {
     const pass = document.getElementById('w-pass-pro').value;
     const pass2 = document.getElementById('w-pass2-pro').value;
@@ -385,6 +427,8 @@ async function finishWizard(){
   saveUsers(users);
   currentUser = user;
   setCurrentUser(user);
+  const emailSent = await notifyAdminOfRegistration(user);
+  saveJSON(LS_KEYS.registrationEmailStatus, emailSent ? 'sent' : 'failed');
   routeAfterAuth();
 }
 
@@ -465,21 +509,21 @@ function nurseCardHTML(n){
       <div class="nc-top">
         <div class="nc-who">
           <div class="nc-avatar">👩‍⚕️</div>
-          <div><div class="nc-name">${n.name}</div><div class="nc-reg">✓ ${n.jvpe}</div></div>
+          <div><div class="nc-name">${esc(n.name)}</div><div class="nc-reg">✓ ${esc(n.jvpe)}</div></div>
         </div>
         <span class="status-pill ${statusClass}">${statusLabel}</span>
       </div>
-      <div class="nc-tags"><span class="nc-tag">${n.spec}</span>${n.tuZona?'<span class="nc-tag zone">Tu zona</span>':''}</div>
+      <div class="nc-tags"><span class="nc-tag">${esc(n.spec)}</span>${n.tuZona?'<span class="nc-tag zone">Tu zona</span>':''}</div>
       <div class="nc-stats">
         <div class="nc-stat"><b>${stars} ${n.rating}</b>${n.reviews} reseñas</div>
         <div class="nc-stat"><b>${n.years} años</b>experiencia</div>
         <div class="nc-stat"><b>$${n.rate}/hr</b>tarifa aprox.</div>
       </div>
-      <div class="nc-loc">📍 ${n.zone} &nbsp;±${n.dist} km</div>
-      <p class="nc-desc">${n.desc}</p>
+      <div class="nc-loc">📍 ${esc(n.zone)} &nbsp;±${n.dist} km</div>
+      <p class="nc-desc">${esc(n.desc)}</p>
       <span class="nc-services">Ver ${n.servicios} servicios ⌄</span>
       ${n.disponible
-        ? `<button class="nc-btn" onclick='openRequestModal(${JSON.stringify(n.name)})'>📶 Enviar Solicitud de Servicio</button>`
+        ? `<button class="nc-btn" onclick='openRequestModal(${esc(JSON.stringify(n.name))})'>📶 Enviar Solicitud de Servicio</button>`
         : `<button class="nc-btn disabled" disabled>✕ No disponible actualmente</button>`}
     </div>`;
 }
@@ -565,7 +609,7 @@ function openRequestModal(nurseName){
   if(requestTargetNurse){
     const stars = '★'.repeat(Math.round(requestTargetNurse.rating));
     document.getElementById('req-nurse-chip-slot').innerHTML = `
-      <div class="req-nurse-chip"><div class="nc-avatar">👩‍⚕️</div><div><div class="n-name">${requestTargetNurse.name}</div><div class="n-meta">${requestTargetNurse.spec} · ${stars} ${requestTargetNurse.rating} (${requestTargetNurse.reviews} reseñas) · $${requestTargetNurse.rate}/hr</div></div></div>`;
+      <div class="req-nurse-chip"><div class="nc-avatar">👩‍⚕️</div><div><div class="n-name">${esc(requestTargetNurse.name)}</div><div class="n-meta">${esc(requestTargetNurse.spec)} · ${stars} ${requestTargetNurse.rating} (${requestTargetNurse.reviews} reseñas) · $${requestTargetNurse.rate}/hr</div></div></div>`;
   } else {
     document.getElementById('req-nurse-chip-slot').innerHTML = '';
   }
@@ -610,5 +654,6 @@ function submitRequest(){
 document.addEventListener('DOMContentLoaded', () => {
   initLegalModal();
   updateNavUser();
+  updateRegistrationEmailStatus();
   wireOptionCards();
 });
